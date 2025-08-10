@@ -37,7 +37,7 @@ jobs:
             su builder -c "git clone https://aur.archlinux.org/$pkg.git"
             cd $pkg
             su builder -c "makepkg -sf --noconfirm --noprogressbar"
-            su builder -c "mv *.pkg.tar.zst /github/workspace/"
+            mv *.pkg.tar.zst /github/workspace/
             cd ..
           done
 
