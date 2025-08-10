@@ -6,7 +6,11 @@ on:
       packages:
         description: "Spazio separato elenco pacchetti AUR da buildare"
         required: true
-        default: "vikunja healthchecks python-cron-descriptor python-cronism python-django-stubs-ext python-oncalendar python-segno python-stasd"
+        default: "vikunja healthchecks"
+
+      dependencies:
+        description: "List of the dependencies of each package to build that are not in the ArchLinux official repositories"
+        default: "python-cron-descriptor python-cronism python-django-stubs-ext python-oncalendar python-segno python-stasd" 
 
   schedule:
     - cron: "0 3 */1 * *"
@@ -28,6 +32,18 @@ jobs:
       - name: Make builder user sudoer
         run: |
           echo 'builder ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+
+      - name: Install AUR dependencies
+        run: |
+          su builder -c "mkdir -p /tmp/build"
+          cd /tmp/build
+          for pkg in ${{ github.event.inputs.packages }}; do
+            su builder -c "git clone https://aur.archlinux.org/$pkg.git"
+            cd $pkg
+            su builder -c "makepkg -sfrci --noconfirm --noprogressbar"
+            mv *.pkg.tar.zst $GITHUB_WORKSPACE/
+            cd ..
+          done
 
       - name: Build AUR packages
         run: |
