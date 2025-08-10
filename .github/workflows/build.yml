@@ -10,7 +10,7 @@ on:
 
       dependencies:
         description: "List of the dependencies of each package to build that are not in the ArchLinux official repositories"
-        default: "python-cron-descriptor python-cronism python-django-stubs-ext python-oncalendar python-segno python-stasd"
+        default: "python-cron-descriptor python-cronsim python-django-stubs-ext python-oncalendar python-segno python-stasd"
 
   schedule:
     - cron: "0 3 */1 * *"
