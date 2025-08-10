@@ -14,7 +14,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: archlinux:latest
+    container: archlinux:build-devel
 
     steps:
     - name: Install dependencies
