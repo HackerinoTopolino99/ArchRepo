@@ -10,7 +10,7 @@ on:
 
       dependencies:
         description: "List of the dependencies of each package to build that are not in the ArchLinux official repositories"
-        default: "python-cron-descriptor python-cronsim python-django-stubs-ext python-oncalendar python-segno python-stasd"
+        default: "python-cron-descriptor python-cronsim python-django-stubs-ext python-oncalendar python-segno python-stasd python-flit-core python-qrcode-artistic pyzbar"
 
   schedule:
     - cron: "0 3 */1 * *"
@@ -23,7 +23,7 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
-          pacman -Sy --noconfirm base-devel git pacman-contrib sudo python
+          pacman -Syu --noconfirm base-devel git pacman-contrib sudo
 
       - name: Create builder user
         run: |
