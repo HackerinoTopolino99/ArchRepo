@@ -14,44 +14,50 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: 
-      image: docker://archlinux:build-devel
+    container: archlinux:latest
 
     steps:
-    - name: Install dependencies
-      run: |
-        pacman -Sy --noconfirm base-devel git pacman-contrib
+      - name: Install dependencies
+        run: |
+          pacman -Sy --noconfirm base-devel git pacman-contrib sudo
 
-    - name: Build AUR packages
-      run: |
-        mkdir -p /tmp/build
-        cd /tmp/build
-        for pkg in ${{ github.event.inputs.packages }}; do
-          git clone https://aur.archlinux.org/$pkg.git
-          cd $pkg
-          makepkg -sf --noconfirm --noprogressbar
-          mv *.pkg.tar.zst /github/workspace/
-          cd ..
-        done
+      - name: Create builder user
+        run: |
+          useradd -m builder
 
-    - name: Checkout gh-pages
-      uses: actions/checkout@v4
-      with:
-        ref: gh-pages
-        path: gh-pages
+      - name: Make builder user sudoer
+        run: |
+          echo 'builder ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 
-    - name: Update repo database
-      run: |
-        cd gh-pages
-        cp ../*.pkg.tar.zst .
-        repo-add myrepo.db.tar.gz ./*.pkg.tar.zst
+      - name: Build AUR packages
+        run: |
+          su builder -c "mkdir -p /tmp/build"
+          cd /tmp/build
+          for pkg in ${{ github.event.inputs.packages }}; do
+            su builder -c "git clone https://aur.archlinux.org/$pkg.git"
+            cd $pkg
+            su builder -c "makepkg -sf --noconfirm --noprogressbar"
+            su builder -c "mv *.pkg.tar.zst /github/workspace/"
+            cd ..
+          done
 
-    - name: Commit and push changes
-      run: |
-        cd gh-pages
-        git config user.name "github-actions[bot]"
-        git config user.email "github-actions[bot]@users.noreply.github.com"
-        git add .
-        git commit -m "Update repo $(date -u +'%Y-%m-%d %H:%M:%S')" || echo "No changes"
-        git push origin gh-pages
+      - name: Checkout gh-pages
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: gh-pages
 
+      - name: Update repo database
+        run: |
+          cd gh-pages
+          cp ../*.pkg.tar.zst .
+          repo-add myrepo.db.tar.gz ./*.pkg.tar.zst
+
+      - name: Commit and push changes
+        run: |
+          cd gh-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Update repo $(date -u +'%Y-%m-%d %H:%M:%S')" || echo "No changes"
+          git push origin gh-pages
