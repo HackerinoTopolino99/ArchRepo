@@ -6,7 +6,7 @@ on:
       packages:
         description: "Spazio separato elenco pacchetti AUR da buildare"
         required: true
-        default: "vikunja healthchecks"
+        default: "vikunja healthchecks python-cron-descriptor python-cronism python-django-stubs-ext python-oncalendar python-segno python-stasd"
 
   schedule:
     - cron: "0 3 */1 * *"
