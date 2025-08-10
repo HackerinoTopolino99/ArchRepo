@@ -10,7 +10,7 @@ on:
 
       dependencies:
         description: "List of the dependencies of each package to build that are not in the ArchLinux official repositories"
-        default: "python-cron-descriptor python-cronism python-django-stubs-ext python-oncalendar python-segno python-stasd" 
+        default: "python-cron-descriptor python-cronism python-django-stubs-ext python-oncalendar python-segno python-stasd"
 
   schedule:
     - cron: "0 3 */1 * *"
@@ -23,7 +23,7 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
-          pacman -Sy --noconfirm base-devel git pacman-contrib sudo
+          pacman -Sy --noconfirm base-devel git pacman-contrib sudo python
 
       - name: Create builder user
         run: |
@@ -40,7 +40,7 @@ jobs:
           for pkg in ${{ github.event.inputs.dependencies }}; do
             su builder -c "git clone https://aur.archlinux.org/$pkg.git"
             cd $pkg
-            su builder -c "makepkg -sfrci --noconfirm --noprogressbar"
+            su builder -c "makepkg -si --noconfirm --noprogressbar"
             mv *.pkg.tar.zst $GITHUB_WORKSPACE/
             cd ..
           done
