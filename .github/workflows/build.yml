@@ -42,7 +42,7 @@ jobs:
             cd $pkg
             if [[ "$pkg" == "python-segno" ]]; then
               sed -i '/^check(){/,/^}/d' PKGBUILD
-              sed -i 's/^checkdepends=(/,/^)/d' PKGBUILD
+              sed -i '/^checkdepends=(/,/^)/d' PKGBUILD
             fi
             su builder -c "makepkg -si --noconfirm --noprogressbar"
             mv *.pkg.tar.zst $GITHUB_WORKSPACE/
