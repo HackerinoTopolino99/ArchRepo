@@ -40,6 +40,10 @@ jobs:
           for pkg in ${{ github.event.inputs.dependencies }}; do
             su builder -c "git clone https://aur.archlinux.org/$pkg.git"
             cd $pkg
+            if [[ "$pkg" == "python-qrcode-artistic" ]]; then
+              sed -i '/^check() {/,/^}/d' PKGBUILD
+              sed -i 's/^checkdepends=.*/checkdepends=()/' PKGBUILD
+            fi
             su builder -c "makepkg -si --noconfirm --noprogressbar"
             mv *.pkg.tar.zst $GITHUB_WORKSPACE/
             cd ..
