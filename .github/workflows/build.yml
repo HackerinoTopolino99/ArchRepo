@@ -6,8 +6,7 @@ on:
       packages:
         description: "Spazio separato elenco pacchetti AUR da buildare"
         required: true
-        default: "vikunja healthchecks homepage filebrowser"
-
+        default: "vikunja healthchecks homepage filebrowser semaphore-bin"
       dependencies:
         description: "List of the dependencies of each package to build that are not in the ArchLinux official repositories"
         default: "python-cron-descriptor python-cronsim python-django-stubs-ext python-oncalendar python-statsd pyzbar python-segno python-qrcode-artistic"
@@ -71,7 +70,7 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE/gh-pages
           cp $GITHUB_WORKSPACE/*.pkg.tar.zst .
-          repo-add myrepo.db.tar.gz ./*.pkg.tar.zst
+          repo-add archserver.db.tar.gz ./*.pkg.tar.zst
 
       - name: Commit and push changes
         run: |
