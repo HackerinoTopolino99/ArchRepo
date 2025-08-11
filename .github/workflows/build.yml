@@ -6,7 +6,7 @@ on:
       packages:
         description: "Spazio separato elenco pacchetti AUR da buildare"
         required: true
-        default: "vikunja healthchecks"
+        default: "vikunja healthchecks homepage filebrowser"
 
       dependencies:
         description: "List of the dependencies of each package to build that are not in the ArchLinux official repositories"
