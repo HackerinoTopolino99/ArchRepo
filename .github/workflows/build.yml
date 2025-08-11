@@ -10,7 +10,7 @@ on:
 
       dependencies:
         description: "List of the dependencies of each package to build that are not in the ArchLinux official repositories"
-        default: "python-cron-descriptor python-cronsim python-django-stubs-ext python-oncalendar python-statsd python-qrcode-artistic pyzbar python-segno"
+        default: "python-cron-descriptor python-cronsim python-django-stubs-ext python-oncalendar python-statsd pyzbar python-segno python-qrcode-artistic"
 
   schedule:
     - cron: "0 3 */1 * *"
@@ -40,9 +40,9 @@ jobs:
           for pkg in ${{ github.event.inputs.dependencies }}; do
             su builder -c "git clone https://aur.archlinux.org/$pkg.git"
             cd $pkg
-            if [[ "$pkg" == "python-qrcode-artistic" ]]; then
-              sed -i '/^check() {/,/^}/d' PKGBUILD
-              sed -i 's/^checkdepends=.*/checkdepends=()/' PKGBUILD
+            if [[ "$pkg" == "python-segno" ]]; then
+              sed -i '/^check(){/,/^}/d' PKGBUILD
+              sed -i 's/^checkdepends=(/,/^)/d' PKGBUILD
             fi
             su builder -c "makepkg -si --noconfirm --noprogressbar"
             mv *.pkg.tar.zst $GITHUB_WORKSPACE/
