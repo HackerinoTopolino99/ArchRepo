@@ -1,23 +1,20 @@
 name: Build AUR packages and update repo
 
 on:
-  workflow_dispatch:
-    inputs:
-      packages:
-        description: "Spazio separato elenco pacchetti AUR da buildare"
-        required: true
-        default: "vikunja healthchecks homepage filebrowser-bin semaphore-bin pgadmin4-server"
-      dependencies:
-        description: "List of the dependencies of each package to build that are not in the ArchLinux official repositories"
-        default: "python-cron-descriptor python-cronsim python-django-stubs-ext python-oncalendar python-statsd pyzbar python-segno python-qrcode-artistic"
-
   schedule:
     - cron: "0 3 */1 * *"
+  push:
+    branches:
+      - main
+      - master
 
 jobs:
   build:
     runs-on: ubuntu-latest
     container: archlinux:latest
+    env:
+      PACKAGES: "vikunja healthchecks homepage filebrowser-bin semaphore-bin pgadmin4-server"
+      DEPENDENCIES: "python-cron-descriptor python-cronsim python-django-stubs-ext python-oncalendar python-statsd pyzbar python-segno python-qrcode-artistic"
 
     steps:
       - name: Install dependencies
