@@ -33,7 +33,7 @@ jobs:
         run: |
           su builder -c "mkdir -p /tmp/build"
           cd /tmp/build
-          for pkg in ${{ github.event.inputs.dependencies }}; do
+          for pkg in ${DEPENDENCIES}; do
             su builder -c "git clone https://aur.archlinux.org/$pkg.git"
             cd $pkg
             if [[ "$pkg" == "python-segno" ]]; then
@@ -49,7 +49,7 @@ jobs:
         run: |
           su builder -c "mkdir -p /tmp/build"
           cd /tmp/build
-          for pkg in ${{ github.event.inputs.packages }}; do
+          for pkg in ${PACKAGES}; do
             su builder -c "git clone https://aur.archlinux.org/$pkg.git"
             cd $pkg
             su builder -c "makepkg -sf --noconfirm --noprogressbar"
