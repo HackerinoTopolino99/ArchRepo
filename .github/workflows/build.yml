@@ -6,7 +6,7 @@ on:
       packages:
         description: "Spazio separato elenco pacchetti AUR da buildare"
         required: true
-        default: "vikunja healthchecks homepage filebrowser-bin semaphore-bin"
+        default: "vikunja healthchecks homepage filebrowser-bin semaphore-bin pgadmin4-server"
       dependencies:
         description: "List of the dependencies of each package to build that are not in the ArchLinux official repositories"
         default: "python-cron-descriptor python-cronsim python-django-stubs-ext python-oncalendar python-statsd pyzbar python-segno python-qrcode-artistic"
