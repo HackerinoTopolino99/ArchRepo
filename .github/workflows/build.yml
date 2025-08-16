@@ -2,7 +2,7 @@ name: Build AUR packages and update repo
 
 on:
   schedule:
-    - cron: "0 3 */1 * *"
+    - cron: "0 3 * * *"
   push:
     branches:
       - main
@@ -67,7 +67,7 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE/gh-pages
           cp $GITHUB_WORKSPACE/*.pkg.tar.zst .
-          repo-add archserver.db.tar.gz ./*.pkg.tar.zst
+          repo-add archlinux-server.db.tar.gz ./*.pkg.tar.zst
 
       - name: Commit and push changes
         run: |
